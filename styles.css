@@ -1,0 +1,127 @@
+:root {
+  --bg: #0f172a; --card: #1e293b; --card2: #334155;
+  --fg: #e2e8f0; --muted: #94a3b8; --line: #334155;
+  --accent: #14b8a6; --accent-d: #0f766e; --warn: #f59e0b;
+  --good: #22c55e; --tech: #38bdf8; --meeting: #f472b6;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: -apple-system, "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+  line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh;
+}
+
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; gap: 8px;
+  padding: calc(10px + var(--safe-top)) 14px 10px;
+  background: var(--accent-d); color: #fff;
+}
+.topbar h1 { font-size: 18px; margin: 0; flex: 1; text-align: center; font-weight: 600; }
+.icon-btn {
+  background: rgba(255,255,255,.15); color: #fff; border: 0; border-radius: 8px;
+  width: 36px; height: 36px; font-size: 20px; cursor: pointer; flex: none;
+}
+.icon-btn[hidden] { visibility: hidden; }
+
+.view { flex: 1; padding: 14px; padding-bottom: 90px; max-width: 760px; width: 100%; margin: 0 auto; }
+
+.tabbar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
+  display: flex; background: var(--card);
+  border-top: 1px solid var(--line);
+  padding-bottom: var(--safe-bottom);
+}
+.tabbar button {
+  flex: 1; background: none; border: 0; color: var(--muted);
+  font-size: 11px; padding: 8px 0 7px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.tabbar button span { font-size: 20px; }
+.tabbar button.active { color: var(--accent); }
+
+.card {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 14px; padding: 16px; margin-bottom: 14px;
+}
+.card h2 { margin: 0 0 10px; font-size: 17px; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.center { text-align: center; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.spacer { flex: 1; }
+
+button.btn {
+  background: var(--accent); color: #022; border: 0; border-radius: 10px;
+  padding: 11px 16px; font-size: 15px; font-weight: 600; cursor: pointer;
+}
+button.btn.ghost { background: var(--card2); color: var(--fg); }
+button.btn.sm { padding: 7px 12px; font-size: 13px; }
+button.btn:active { transform: scale(.97); }
+button.btn:disabled { opacity: .5; }
+
+.pill { font-size: 11px; padding: 2px 8px; border-radius: 999px; background: var(--card2); color: var(--muted); }
+.pill.tech { background: #0c4a6e; color: var(--tech); }
+.pill.meeting { background: #831843; color: var(--meeting); }
+
+/* 阅读 */
+.para { position: relative; margin-bottom: 14px; padding: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; }
+.para p { margin: 0 0 10px; font-size: 16.5px; }
+.para .ptools { display: flex; gap: 8px; }
+.para.playing { border-color: var(--accent); }
+.qa { border-top: 1px dashed var(--line); padding-top: 10px; margin-top: 10px; }
+.qa summary { cursor: pointer; font-weight: 600; }
+.qa .ans { color: var(--muted); margin-top: 6px; }
+
+/* 单词卡 */
+.flash {
+  min-height: 230px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; cursor: pointer; user-select: none;
+}
+.flash .term { font-size: 30px; font-weight: 700; }
+.flash .phon { color: var(--muted); margin-top: 6px; }
+.flash .zh { font-size: 24px; color: var(--accent); margin: 10px 0; }
+.flash .ex { color: var(--muted); font-size: 15px; max-width: 90%; }
+.flash .hint { color: var(--muted); font-size: 12px; margin-top: 14px; }
+.grade { display: flex; gap: 10px; justify-content: center; }
+.grade .btn { flex: 1; max-width: 140px; }
+.grade .again { background: #7f1d1d; color: #fecaca; }
+.grade .good { background: #14532d; color: #bbf7d0; }
+
+.progress-bar { height: 8px; background: var(--card2); border-radius: 99px; overflow: hidden; }
+.progress-bar > i { display: block; height: 100%; background: var(--accent); }
+
+/* 会议 */
+.phrase { padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; margin-bottom: 8px; display: flex; gap: 10px; align-items: flex-start; }
+.phrase .t { flex: 1; }
+.dlg { display: flex; margin-bottom: 10px; }
+.dlg.you { flex-direction: row-reverse; }
+.dlg .bubble { max-width: 80%; padding: 9px 13px; border-radius: 14px; font-size: 15px; }
+.dlg.cust .bubble { background: var(--card2); border-top-left-radius: 4px; }
+.dlg.you .bubble { background: var(--accent-d); color: #fff; border-top-right-radius: 4px; }
+
+/* 跟读 */
+.shadow-line { padding: 12px; border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; }
+.shadow-line.playing { border-color: var(--accent); }
+.shadow-line .t { font-size: 16px; margin-bottom: 8px; }
+
+/* 进度 / 首页 */
+.weekcard { display: flex; align-items: center; gap: 12px; }
+.weekcard .n { width: 42px; height: 42px; border-radius: 10px; background: var(--accent-d); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; flex: none; }
+.weekcard.locked { opacity: .5; }
+.stat { display: flex; gap: 12px; }
+.stat .box { flex: 1; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; text-align: center; }
+.stat .box b { font-size: 26px; display: block; color: var(--accent); }
+
+.sheet-bg { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 20; display: flex; align-items: flex-end; }
+.sheet { background: var(--card); width: 100%; max-height: 70vh; overflow: auto; border-radius: 16px 16px 0 0; padding: 16px; padding-bottom: calc(16px + var(--safe-bottom)); }
+.sheet h3 { margin: 0 0 12px; }
+.wk-item { padding: 12px; border: 1px solid var(--line); border-radius: 10px; margin-bottom: 8px; cursor: pointer; }
+.wk-item.active { border-color: var(--accent); }
+
+.rate-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.rate-toggle button { background: var(--card); color: var(--muted); border: 0; padding: 6px 12px; font-size: 13px; cursor: pointer; }
+.rate-toggle button.active { background: var(--accent); color: #022; }
