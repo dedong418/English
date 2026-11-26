@@ -5,6 +5,7 @@ const STORE = "ykyy_v1";
 const state = {
   week: 1,
   tab: "read",
+  dailyScene: null,
   rate: "normal", // normal | slow
   data: load(),
 };
@@ -249,6 +250,72 @@ function viewShadow() {
   return v;
 }
 
+/* ---------- 日常交流（按场景，不跟周次）---------- */
+function viewDaily() {
+  const v = el("div");
+  const scenes = (window.DAILY && DAILY.scenes) || [];
+  if (!scenes.length) { v.appendChild(el("div", "card muted center", "日常内容未加载")); return v; }
+
+  // 场景列表
+  if (!state.dailyScene) {
+    v.appendChild(el("div", "card small muted", "日常交流按场景分，和周次无关。挑一个场景，看句型、听读音、跟对话练。弱项优先：表达看法、电话会议。"));
+    scenes.forEach(sc => {
+      const item = el("div", "card weekcard");
+      item.style.cursor = "pointer";
+      item.innerHTML = `<div class="n">${sc.icon}</div><div style="flex:1"><div><b>${esc(sc.title)}</b></div>
+        <div class="small muted">${esc(sc.desc)}</div></div><div class="muted">›</div>`;
+      item.onclick = () => { state.dailyScene = sc.id; render(); };
+      v.appendChild(item);
+    });
+    return v;
+  }
+
+  // 场景详情
+  const sc = scenes.find(s => s.id === state.dailyScene) || scenes[0];
+  const back = el("button", "btn ghost sm", "‹ 所有场景");
+  back.onclick = () => { state.dailyScene = null; render(); };
+  v.appendChild(back);
+  v.appendChild(el("div", "card", `<h2>${sc.icon} ${esc(sc.title)}</h2><div class="small muted">${esc(sc.desc)}</div>`));
+
+  sc.phrases.forEach(grp => {
+    const c = el("div", "card");
+    c.appendChild(el("h2", null, esc(grp.group)));
+    grp.items.forEach(p => {
+      const row = el("div", "phrase");
+      row.appendChild(el("div", "t", `${esc(p.en)}<br><span class="small muted">${esc(p.zh)}</span>`));
+      const b = el("button", "btn ghost sm", "🔊");
+      b.onclick = () => speak(p.en);
+      row.appendChild(b);
+      c.appendChild(row);
+    });
+    v.appendChild(c);
+  });
+
+  const d = el("div", "card");
+  d.appendChild(el("h2", null, "对话"));
+  const playAll = el("button", "btn sm", "🔊 连续朗读");
+  let seq = 0;
+  playAll.onclick = () => {
+    const lines = sc.dialog;
+    const next = () => { if (seq < lines.length) { const l = lines[seq++]; speak(l.t, { onend: next }); } else seq = 0; };
+    seq = 0; next();
+  };
+  d.appendChild(playAll);
+  d.appendChild(el("div", null, "<br>"));
+  sc.dialog.forEach(line => {
+    const who = line.s === "You" ? "you" : "cust";
+    const row = el("div", "dlg " + who);
+    const bub = el("div", "bubble", esc(line.t));
+    bub.onclick = () => speak(line.t);
+    row.appendChild(bub);
+    d.appendChild(row);
+  });
+  v.appendChild(d);
+
+  if (sc.tip) v.appendChild(el("div", "card small", `💡 ${esc(sc.tip)}`));
+  return v;
+}
+
 /* ---------- 进度 / 首页 ---------- */
 function viewHome() {
   const v = el("div");
@@ -315,16 +382,18 @@ function render() {
   stopSpeak();
   const view = document.getElementById("view");
   view.innerHTML = "";
-  const map = { read: viewRead, vocab: viewVocab, meeting: viewMeeting, shadow: viewShadow, home: viewHome };
+  const map = { read: viewRead, vocab: viewVocab, meeting: viewMeeting, daily: viewDaily, shadow: viewShadow, home: viewHome };
   view.appendChild((map[state.tab] || viewHome)());
   view.scrollTop = 0; window.scrollTo(0, 0);
   const names = { read: "阅读", vocab: "单词", meeting: "会议", shadow: "跟读", home: "域控英语" };
-  document.getElementById("title").textContent = state.tab === "home" ? "域控英语" : `第 ${state.week} 周 · ${names[state.tab]}`;
+  if (state.tab === "home") document.getElementById("title").textContent = "域控英语";
+  else if (state.tab === "daily") document.getElementById("title").textContent = "日常交流";
+  else document.getElementById("title").textContent = `第 ${state.week} 周 · ${names[state.tab]}`;
   document.querySelectorAll(".tabbar button").forEach(b => b.classList.toggle("active", b.dataset.tab === state.tab));
 }
 
 document.querySelectorAll(".tabbar button").forEach(b => {
-  b.onclick = () => { state.tab = b.dataset.tab; render(); };
+  b.onclick = () => { if (state.tab !== b.dataset.tab) state.dailyScene = null; state.tab = b.dataset.tab; render(); };
 });
 document.getElementById("menuBtn").onclick = openWeekSheet;
 document.getElementById("backBtn").hidden = true;
