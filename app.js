@@ -5,7 +5,10 @@ const STORE = "ykyy_v1";
 const state = {
   week: 1,
   tab: "read",
+  dailySub: "scene", // scene | read | listen
   dailyScene: null,
+  dailyArticle: null,
+  dailyClip: null,
   rate: "normal", // normal | slow
   data: load(),
 };
@@ -250,15 +253,32 @@ function viewShadow() {
   return v;
 }
 
-/* ---------- 日常交流（按场景，不跟周次）---------- */
+/* ---------- 日常交流：场景 / 阅读 / 听力 ---------- */
 function viewDaily() {
+  const v = el("div");
+  const sub = el("div", "rate-toggle");
+  sub.style.display = "flex"; sub.style.marginBottom = "12px"; sub.style.width = "100%";
+  [["scene", "场景"], ["read", "阅读"], ["listen", "听力"]].forEach(([k, lbl]) => {
+    const b = el("button", state.dailySub === k ? "active" : "", lbl);
+    b.style.flex = "1";
+    b.onclick = () => { state.dailySub = k; render(); };
+    sub.appendChild(b);
+  });
+  v.appendChild(sub);
+  if (state.dailySub === "read") { v.appendChild(viewDailyRead()); return v; }
+  if (state.dailySub === "listen") { v.appendChild(viewDailyListen()); return v; }
+  v.appendChild(viewDailyScene());
+  return v;
+}
+
+function viewDailyScene() {
   const v = el("div");
   const scenes = (window.DAILY && DAILY.scenes) || [];
   if (!scenes.length) { v.appendChild(el("div", "card muted center", "日常内容未加载")); return v; }
 
   // 场景列表
   if (!state.dailyScene) {
-    v.appendChild(el("div", "card small muted", "日常交流按场景分，和周次无关。挑一个场景，看句型、听读音、跟对话练。弱项优先：表达看法、电话会议。"));
+    v.appendChild(el("div", "card small muted", "挑一个场景，看句型、听读音、跟对话练。弱项优先：表达看法、电话会议。"));
     scenes.forEach(sc => {
       const item = el("div", "card weekcard");
       item.style.cursor = "pointer";
@@ -313,6 +333,172 @@ function viewDaily() {
   v.appendChild(d);
 
   if (sc.tip) v.appendChild(el("div", "card small", `💡 ${esc(sc.tip)}`));
+  return v;
+}
+
+/* ---------- 日常阅读 ---------- */
+function viewDailyRead() {
+  const v = el("div");
+  const arts = (window.DAILYREAD && DAILYREAD.articles) || [];
+  if (!arts.length) { v.appendChild(el("div", "card muted center", "暂无阅读")); return v; }
+
+  if (!state.dailyArticle) {
+    v.appendChild(el("div", "card small muted", "计时读，读完看每分钟多少词。目标是越读越快，不是查光生词。点生词看中文。"));
+    arts.forEach(a => {
+      const item = el("div", "card weekcard"); item.style.cursor = "pointer";
+      item.innerHTML = `<div class="n">📰</div><div style="flex:1"><div><b>${esc(a.title)}</b></div>
+        <div class="small muted">${esc(a.level)} · ${a.words} 词</div></div><div class="muted">›</div>`;
+      item.onclick = () => { state.dailyArticle = a.id; render(); };
+      v.appendChild(item);
+    });
+    return v;
+  }
+
+  const a = arts.find(x => x.id === state.dailyArticle) || arts[0];
+  const back = el("button", "btn ghost sm", "‹ 所有文章");
+  back.onclick = () => { state.dailyArticle = null; render(); };
+  v.appendChild(back);
+
+  // 计时器
+  const timer = el("div", "card");
+  timer.innerHTML = `<h2>${esc(a.title)}</h2><div class="small muted">${esc(a.level)} · ${a.words} 词</div>`;
+  const trow = el("div", "row"); trow.style.marginTop = "10px";
+  const disp = el("span", null, "00:00"); disp.style.fontSize = "22px"; disp.style.fontWeight = "700";
+  let t0 = 0, raf = 0;
+  const fmt = ms => { const s = Math.floor(ms / 1000); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); };
+  const startBtn = el("button", "btn sm", "▶ 开始计时");
+  const stopBtn = el("button", "btn sm ghost", "■ 读完");
+  const result = el("div", "small"); result.style.marginTop = "8px";
+  const tick = () => { disp.textContent = fmt(performance.now() - t0); raf = requestAnimationFrame(tick); };
+  startBtn.onclick = () => { t0 = performance.now(); cancelAnimationFrame(raf); tick(); result.textContent = ""; };
+  stopBtn.onclick = () => {
+    if (!t0) return; cancelAnimationFrame(raf);
+    const sec = (performance.now() - t0) / 1000; t0 = 0;
+    const wpm = Math.round(a.words / (sec / 60));
+    result.innerHTML = `用时 ${fmt(sec * 1000)}，约 <b style="color:var(--accent)">${wpm}</b> 词/分钟。` +
+      (wpm < 60 ? "（逐字翻译的信号，下次试着不回看）" : wpm < 120 ? "（不错，继续提速）" : "（很好的速度）");
+  };
+  trow.append(startBtn, stopBtn, el("span", "spacer"), disp);
+  timer.appendChild(trow); timer.appendChild(result);
+  v.appendChild(timer);
+
+  // 正文（生词可点）
+  const body = el("div", "card");
+  a.paras.forEach(p => {
+    const para = el("p"); para.style.fontSize = "16.5px"; para.style.margin = "0 0 12px";
+    const words = p.split(/(\s+)/);
+    words.forEach(tok => {
+      const key = tok.toLowerCase().replace(/[^a-z-]/g, "");
+      if (a.gloss && a.gloss[key]) {
+        const span = el("span", null, esc(tok));
+        span.style.cssText = "color:var(--tech);border-bottom:1px dotted var(--tech);cursor:pointer";
+        span.onclick = () => alert(key + " = " + a.gloss[key]);
+        para.appendChild(span);
+      } else para.appendChild(document.createTextNode(tok));
+    });
+    body.appendChild(para);
+  });
+  // 多词词组 gloss（单独列出，避免分词切不中）
+  const phraseGloss = Object.keys(a.gloss || {}).filter(k => k.includes(" "));
+  if (phraseGloss.length) {
+    const pg = el("div", "small muted"); pg.style.borderTop = "1px dashed var(--line)"; pg.style.paddingTop = "8px";
+    pg.innerHTML = "词组：" + phraseGloss.map(k => `${k} = ${a.gloss[k]}`).join("　·　");
+    body.appendChild(pg);
+  }
+  const sp = el("button", "btn ghost sm", "🔊 朗读全文");
+  sp.onclick = () => speak(a.paras.join(" "));
+  body.appendChild(sp);
+  v.appendChild(body);
+
+  const qc = el("div", "card");
+  qc.appendChild(el("h2", null, "理解题"));
+  a.questions.forEach((qa, i) => qc.appendChild(el("details", "qa", `<summary>${i + 1}. ${esc(qa.q)}</summary><div class="ans">${esc(qa.a)}</div>`)));
+  v.appendChild(qc);
+  return v;
+}
+
+/* ---------- 日常听力：盲听 + 听写 ---------- */
+function viewDailyListen() {
+  const v = el("div");
+  const clips = (window.DAILYLISTEN && DAILYLISTEN.clips) || [];
+  if (!clips.length) { v.appendChild(el("div", "card muted center", "暂无听力")); return v; }
+
+  if (!state.dailyClip) {
+    v.appendChild(el("div", "card small muted", "先盲听（不看文字）答题，再逐句听写核对。机器音偏平，每篇附真人音频链接。"));
+    clips.forEach(c => {
+      const item = el("div", "card weekcard"); item.style.cursor = "pointer";
+      item.innerHTML = `<div class="n">🎧</div><div style="flex:1"><div><b>${esc(c.title)}</b></div>
+        <div class="small muted">${esc(c.level)} · ${c.sentences.length} 句</div></div><div class="muted">›</div>`;
+      item.onclick = () => { state.dailyClip = c.id; render(); };
+      v.appendChild(item);
+    });
+    return v;
+  }
+
+  const c = clips.find(x => x.id === state.dailyClip) || clips[0];
+  const back = el("button", "btn ghost sm", "‹ 所有听力");
+  back.onclick = () => { state.dailyClip = null; render(); };
+  v.appendChild(back);
+
+  // 速度切换
+  const head = el("div", "card");
+  head.innerHTML = `<h2>${esc(c.title)}</h2><div class="small muted">${esc(c.level)}</div>`;
+  const rt = el("div", "rate-toggle"); rt.style.marginTop = "8px";
+  ["slow", "normal"].forEach(r => {
+    const b = el("button", state.rate === r ? "active" : "", r === "slow" ? "慢速" : "正常");
+    b.onclick = () => { state.rate = r; render(); };
+    rt.appendChild(b);
+  });
+  head.appendChild(rt);
+  v.appendChild(head);
+
+  // 盲听区
+  const blind = el("div", "card");
+  blind.appendChild(el("h2", null, "① 盲听答题"));
+  blind.appendChild(el("div", "small muted", "先别展开文字。整段听 2~3 遍，试着答题。"));
+  const playFull = el("button", "btn"); playFull.style.marginTop = "10px"; playFull.textContent = "🔊 播放整段";
+  playFull.onclick = () => {
+    let i = 0; const next = () => { if (i < c.sentences.length) speak(c.sentences[i++], { onend: next }); };
+    next();
+  };
+  blind.appendChild(playFull);
+  const qc = el("div"); qc.style.marginTop = "10px";
+  c.questions.forEach((qa, i) => qc.appendChild(el("details", "qa", `<summary>${i + 1}. ${esc(qa.q)}</summary><div class="ans">${esc(qa.a)}</div>`)));
+  blind.appendChild(qc);
+  v.appendChild(blind);
+
+  // 听写区
+  const dict = el("div", "card");
+  dict.appendChild(el("h2", null, "② 逐句听写"));
+  dict.appendChild(el("div", "small muted", "每句播放 → 写下来 → 点显示核对。"));
+  c.sentences.forEach((s, i) => {
+    const line = el("div", "shadow-line"); line.style.marginTop = "10px";
+    const bar = el("div", "row");
+    const play = el("button", "btn ghost sm", `🔊 第 ${i + 1} 句`);
+    play.onclick = () => speak(s);
+    const show = el("button", "btn ghost sm", "显示");
+    const text = el("div", "small"); text.style.marginTop = "8px"; text.style.display = "none";
+    text.textContent = s;
+    show.onclick = () => { text.style.display = text.style.display === "none" ? "block" : "none"; show.textContent = text.style.display === "none" ? "显示" : "隐藏"; };
+    bar.append(play, el("span", "spacer"), show);
+    line.append(bar, text);
+    dict.appendChild(line);
+  });
+  v.appendChild(dict);
+
+  // 真人音频
+  if (c.realAudio && c.realAudio.length) {
+    const ra = el("div", "card");
+    ra.appendChild(el("h2", null, "③ 换真人语调"));
+    ra.appendChild(el("div", "small muted", "机器音语调偏平。同主题的真人材料："));
+    c.realAudio.forEach(r => {
+      const a = el("a", null, esc(r.label));
+      a.href = r.url; a.target = "_blank"; a.rel = "noopener";
+      a.style.cssText = "display:block;margin-top:8px;color:var(--accent)";
+      ra.appendChild(a);
+    });
+    v.appendChild(ra);
+  }
   return v;
 }
 
@@ -393,7 +579,10 @@ function render() {
 }
 
 document.querySelectorAll(".tabbar button").forEach(b => {
-  b.onclick = () => { if (state.tab !== b.dataset.tab) state.dailyScene = null; state.tab = b.dataset.tab; render(); };
+  b.onclick = () => {
+    if (state.tab !== b.dataset.tab) { state.dailyScene = null; state.dailyArticle = null; state.dailyClip = null; }
+    state.tab = b.dataset.tab; render();
+  };
 });
 document.getElementById("menuBtn").onclick = openWeekSheet;
 document.getElementById("backBtn").hidden = true;

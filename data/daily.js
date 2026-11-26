@@ -189,6 +189,284 @@ window.DAILY = {
         { s: "You", t: "Same here. Have a good one!" }
       ],
       tip: "闲聊的黄金公式：回答一句 + 反问一句（… You? / How about you?）。这样对话不会冷场。"
+    },
+    {
+      id: "shopping", icon: "🛍️", title: "购物 · 退换",
+      desc: "买东西、问价、退换货",
+      phrases: [
+        { group: "挑选 / 问价", items: [
+          { en: "I'm just looking, thanks.", zh: "我随便看看，谢谢。" },
+          { en: "How much is this?", zh: "这个多少钱？" },
+          { en: "Do you have this in a larger size?", zh: "这个有大一号的吗？" },
+          { en: "Can I try it on?", zh: "我能试穿吗？" }
+        ]},
+        { group: "付款", items: [
+          { en: "Do you take card?", zh: "你们收卡吗？" },
+          { en: "Can I get a receipt, please?", zh: "能给我张收据吗？" },
+          { en: "Is there a discount on this?", zh: "这个有折扣吗？" }
+        ]},
+        { group: "退换货", items: [
+          { en: "I'd like to return this. It doesn't fit.", zh: "我想退这个，不合身。" },
+          { en: "Can I exchange it for a different size?", zh: "能换个尺码吗？" },
+          { en: "Here's the receipt. I bought it yesterday.", zh: "这是收据，我昨天买的。" }
+        ]}
+      ],
+      dialog: [
+        { s: "Clerk", t: "Hi, can I help you find anything?" },
+        { s: "You", t: "I'm just looking, thanks. Actually — do you have this jacket in medium?" },
+        { s: "Clerk", t: "Let me check. Yes, here you go. The fitting room is on the left." },
+        { s: "You", t: "Thanks. Do you take card?" },
+        { s: "Clerk", t: "Of course. Card or phone both work." },
+        { s: "You", t: "Great, I'll take it." }
+      ],
+      tip: "进店店员问 Can I help you? 不想被跟着，一句 I'm just looking, thanks 就能礼貌脱身。"
+    },
+    {
+      id: "health", icon: "💊", title: "看病 · 药店",
+      desc: "描述症状、买药",
+      phrases: [
+        { group: "描述症状", items: [
+          { en: "I've had a headache since yesterday.", zh: "我从昨天开始头疼。" },
+          { en: "I think I'm coming down with a cold.", zh: "我好像要感冒了。" },
+          { en: "My stomach has been upset.", zh: "我肠胃不太舒服。" },
+          { en: "I'm allergic to penicillin.", zh: "我对青霉素过敏。" }
+        ]},
+        { group: "药店", items: [
+          { en: "Do you have something for a sore throat?", zh: "有治嗓子疼的药吗？" },
+          { en: "How often should I take this?", zh: "这个多久吃一次？" },
+          { en: "Is it okay to take with food?", zh: "可以和食物一起吃吗？" }
+        ]}
+      ],
+      dialog: [
+        { s: "Pharmacist", t: "Hi, how can I help?" },
+        { s: "You", t: "I've had a sore throat and a cough for two days. Do you have anything for that?" },
+        { s: "Pharmacist", t: "This one works well. Are you allergic to anything?" },
+        { s: "You", t: "Just penicillin. Is there any in this?" },
+        { s: "Pharmacist", t: "No, you're fine. Take one twice a day, after meals." },
+        { s: "You", t: "Got it, thank you." }
+      ],
+      tip: "出国看病或买药，先主动说过敏史（I'm allergic to…），比等人问更安全。"
+    },
+    {
+      id: "directions", icon: "🧭", title: "问路 · 交通",
+      desc: "问路、坐车、买票",
+      phrases: [
+        { group: "问路", items: [
+          { en: "Excuse me, how do I get to the station?", zh: "请问车站怎么走？" },
+          { en: "Is it within walking distance?", zh: "走路能到吗？" },
+          { en: "I think I'm lost. Could you help me?", zh: "我好像迷路了，能帮我吗？" },
+          { en: "Which way is the exit?", zh: "出口在哪个方向？" }
+        ]},
+        { group: "公共交通", items: [
+          { en: "Does this bus go downtown?", zh: "这趟车去市区吗？" },
+          { en: "A single ticket to the airport, please.", zh: "买一张到机场的单程票。" },
+          { en: "Which line should I take?", zh: "我该坐哪条线？" },
+          { en: "Could you tell me when to get off?", zh: "到站时能提醒我一下吗？" }
+        ]}
+      ],
+      dialog: [
+        { s: "You", t: "Excuse me, how do I get to the central station?" },
+        { s: "Passer-by", t: "Take the number 5 bus, it's three stops." },
+        { s: "You", t: "Is it within walking distance?" },
+        { s: "Passer-by", t: "About twenty minutes on foot, so the bus is easier." },
+        { s: "You", t: "Thanks a lot. Where's the bus stop?" },
+        { s: "Passer-by", t: "Just around the corner, on your right." }
+      ],
+      tip: "问路开头固定用 Excuse me, how do I get to…? 听回答抓方向词：left / right / straight / stops 就够用。"
+    },
+    {
+      id: "invite", icon: "📅", title: "邀请 · 拒绝",
+      desc: "约人、答应、婉拒",
+      phrases: [
+        { group: "发出邀请", items: [
+          { en: "Would you like to grab dinner sometime?", zh: "改天一起吃个饭？" },
+          { en: "We're going for drinks after work. Want to join?", zh: "下班我们去喝一杯，一起来吗？" },
+          { en: "Are you free this weekend?", zh: "你这周末有空吗？" }
+        ]},
+        { group: "答应", items: [
+          { en: "Sure, I'd love to.", zh: "好啊，很乐意。" },
+          { en: "Sounds great, count me in.", zh: "听起来不错，算我一个。" },
+          { en: "What time works for you?", zh: "你什么时间方便？" }
+        ]},
+        { group: "婉拒", items: [
+          { en: "Thanks for the invite, but I can't make it this time.", zh: "谢谢邀请，这次我去不了。" },
+          { en: "I'd love to, but I already have plans.", zh: "我很想去，但已经有安排了。" },
+          { en: "Maybe next time? Let's find another day.", zh: "下次吧？我们再约个时间。" }
+        ]}
+      ],
+      dialog: [
+        { s: "A", t: "A few of us are going for dinner on Friday. Want to join?" },
+        { s: "You", t: "Thanks for the invite! Friday's a bit tricky — I already have plans." },
+        { s: "A", t: "No problem. How about next week?" },
+        { s: "You", t: "That works much better. Count me in." },
+        { s: "A", t: "Great, I'll let you know the time." },
+        { s: "You", t: "Perfect, looking forward to it." }
+      ],
+      tip: "拒绝别只说 No。先谢邀请，给个轻描淡写的理由，再抛一句下次（Maybe next time?），关系不会尴尬。"
+    },
+    {
+      id: "thanks", icon: "🙏", title: "道歉 · 感谢",
+      desc: "表达谢意、道歉、回应",
+      phrases: [
+        { group: "感谢", items: [
+          { en: "Thanks so much, I really appreciate it.", zh: "太谢谢了，真的很感激。" },
+          { en: "That's very kind of you.", zh: "你人真好。" },
+          { en: "I owe you one.", zh: "我欠你个人情。" }
+        ]},
+        { group: "道歉", items: [
+          { en: "Sorry, my mistake.", zh: "抱歉，我的错。" },
+          { en: "I'm sorry for the delay.", zh: "抱歉让你久等了。" },
+          { en: "Apologies, I didn't catch your name.", zh: "不好意思，我没记住你的名字。" }
+        ]},
+        { group: "回应别人的谢 / 歉", items: [
+          { en: "No problem at all.", zh: "完全没问题。" },
+          { en: "Don't worry about it.", zh: "别放在心上。" },
+          { en: "Happy to help.", zh: "乐意帮忙。" }
+        ]}
+      ],
+      dialog: [
+        { s: "A", t: "Thanks for covering the meeting for me yesterday." },
+        { s: "You", t: "No problem at all. Happy to help." },
+        { s: "A", t: "I owe you one. Sorry it was such short notice." },
+        { s: "You", t: "Don't worry about it. It went fine." },
+        { s: "A", t: "Let me buy you a coffee sometime." },
+        { s: "You", t: "Sounds good, I won't say no to that." }
+      ],
+      tip: "别人谢你，英语里几乎不说 You're welcome 以外的套话，No problem / Happy to help 更自然口语。"
+    },
+    {
+      id: "complaint", icon: "⚠️", title: "投诉 · 解决问题",
+      desc: "东西坏了、服务有问题时怎么说",
+      phrases: [
+        { group: "说明问题", items: [
+          { en: "There seems to be a problem with my order.", zh: "我的订单好像有点问题。" },
+          { en: "The room is not what I booked.", zh: "房间和我订的不一样。" },
+          { en: "This isn't working properly.", zh: "这个用不了。" },
+          { en: "I was charged twice.", zh: "我被扣了两次钱。" }
+        ]},
+        { group: "提出要求（保持礼貌但坚定）", items: [
+          { en: "Could you look into this for me?", zh: "能帮我查一下吗？" },
+          { en: "I'd like a refund, please.", zh: "我想退款。" },
+          { en: "Is there any way to fix this?", zh: "有办法解决吗？" },
+          { en: "Who can I speak to about this?", zh: "这事我该找谁？" }
+        ]}
+      ],
+      dialog: [
+        { s: "You", t: "Hi, there seems to be a problem with my bill. I was charged twice." },
+        { s: "Staff", t: "Let me check that for you. Do you have the receipt?" },
+        { s: "You", t: "Here it is. You can see the same amount appears twice." },
+        { s: "Staff", t: "You're right, I'm sorry. I'll refund one of them now." },
+        { s: "You", t: "Thank you. How long will the refund take?" },
+        { s: "Staff", t: "Three to five business days." }
+      ],
+      tip: "投诉时英语的分寸：语气礼貌、事实清楚、要求明确。There seems to be a problem… 比 You made a mistake 更容易让对方配合。"
+    },
+    {
+      id: "bank", icon: "🏦", title: "银行 · 换钱",
+      desc: "换汇、取钱、卡的问题",
+      phrases: [
+        { group: "换汇 / 取钱", items: [
+          { en: "I'd like to exchange some money.", zh: "我想换点钱。" },
+          { en: "What's the exchange rate today?", zh: "今天汇率是多少？" },
+          { en: "Can I withdraw cash here?", zh: "这里能取现金吗？" },
+          { en: "Could I have smaller notes, please?", zh: "能换成小面额的吗？" }
+        ]},
+        { group: "卡的问题", items: [
+          { en: "My card was declined. Do you know why?", zh: "我的卡刷不了，知道为什么吗？" },
+          { en: "Is there a fee for foreign cards?", zh: "外币卡收手续费吗？" },
+          { en: "The ATM didn't give me a receipt.", zh: "取款机没出凭条。" }
+        ]}
+      ],
+      dialog: [
+        { s: "You", t: "Hi, I'd like to exchange some money. What's the rate today?" },
+        { s: "Teller", t: "For US dollars, it's 7.1. How much would you like?" },
+        { s: "You", t: "Five hundred. Could I have some smaller notes?" },
+        { s: "Teller", t: "Sure. Can I see your passport?" },
+        { s: "You", t: "Here you go. Is there any fee?" },
+        { s: "Teller", t: "No fee for this amount. Here's your cash and receipt." }
+      ],
+      tip: "换钱先问 What's the rate? 再给金额；需要零钱直接说 smaller notes，出国很实用。"
+    },
+    {
+      id: "farewell", icon: "👋", title: "送别 · 客套",
+      desc: "结束拜访、道别、保持联系",
+      phrases: [
+        { group: "结束拜访", items: [
+          { en: "Thanks for having me, it was great.", zh: "谢谢招待，很愉快。" },
+          { en: "I really enjoyed the visit.", zh: "这次来访我很享受。" },
+          { en: "I'd better get going, it's getting late.", zh: "我该走了，不早了。" }
+        ]},
+        { group: "道别 / 保持联系", items: [
+          { en: "Let's keep in touch.", zh: "保持联系。" },
+          { en: "Safe travels!", zh: "一路平安！" },
+          { en: "Hope to see you again soon.", zh: "希望很快再见。" },
+          { en: "Say hi to the team for me.", zh: "替我问候团队。" }
+        ]}
+      ],
+      dialog: [
+        { s: "Host", t: "It was great working with you this week." },
+        { s: "You", t: "Likewise. Thanks for having me — I really enjoyed it." },
+        { s: "Host", t: "Have a safe trip back. Let's keep in touch." },
+        { s: "You", t: "Definitely. Say hi to the team for me." },
+        { s: "Host", t: "Will do. See you next time." },
+        { s: "You", t: "Looking forward to it. Take care!" }
+      ],
+      tip: "出差结束的万能道别组合：Thanks for having me + Let's keep in touch + Safe travels，说完就很得体。"
+    },
+    {
+      id: "culture", icon: "🎉", title: "文化 · 节日",
+      desc: "聊节日、介绍中国、回应好奇",
+      phrases: [
+        { group: "聊节日", items: [
+          { en: "What do people usually do for this holiday?", zh: "这个节日大家一般做什么？" },
+          { en: "In China, we celebrate Spring Festival with family.", zh: "在中国，我们和家人一起过春节。" },
+          { en: "Happy holidays! Any plans?", zh: "节日快乐！有安排吗？" }
+        ]},
+        { group: "介绍 / 回应好奇", items: [
+          { en: "It's a bit like your Thanksgiving, actually.", zh: "其实有点像你们的感恩节。" },
+          { en: "I'm from Shanghai. Have you ever been to China?", zh: "我来自上海，你去过中国吗？" },
+          { en: "The food is quite different from region to region.", zh: "不同地区的菜差别很大。" }
+        ]}
+      ],
+      dialog: [
+        { s: "A", t: "So what's the biggest holiday in China?" },
+        { s: "You", t: "Spring Festival, our new year. Families get together, a bit like your Christmas." },
+        { s: "A", t: "Nice. What do you usually eat?" },
+        { s: "You", t: "Dumplings in the north, rice cakes in the south. It really varies by region." },
+        { s: "A", t: "I'd love to try that someday." },
+        { s: "You", t: "You should! Come visit, I'll show you around." }
+      ],
+      tip: "介绍中国文化时，用对方熟悉的东西类比（a bit like your…），对方立刻就懂，也更容易聊下去。"
+    },
+    {
+      id: "phoneadmin", icon: "☎️", title: "办事 · 客服",
+      desc: "打客服电话、预约、办手续",
+      phrases: [
+        { group: "说明来意", items: [
+          { en: "Hi, I'm calling about my booking.", zh: "你好，我想问一下我的预订。" },
+          { en: "I'd like to make an appointment.", zh: "我想预约。" },
+          { en: "I need to change my reservation.", zh: "我需要改一下预订。" }
+        ]},
+        { group: "配合核对", items: [
+          { en: "My booking number is 4-7-2-9.", zh: "我的预订号是 4729。" },
+          { en: "It's under the name Dedong.", zh: "是用 Dedong 这个名字订的。" },
+          { en: "Let me spell that for you.", zh: "我给你拼一下。" }
+        ]},
+        { group: "确认 / 结束", items: [
+          { en: "Could you confirm that by email?", zh: "能发邮件确认一下吗？" },
+          { en: "Just to confirm, that's on the 5th, right?", zh: "确认一下，是 5 号对吧？" },
+          { en: "Thanks for your help. Have a good day.", zh: "谢谢帮忙，祝你愉快。" }
+        ]}
+      ],
+      dialog: [
+        { s: "Agent", t: "Thank you for calling. How can I help?" },
+        { s: "You", t: "Hi, I'd like to change my reservation. It's under the name Dedong." },
+        { s: "Agent", t: "Could you give me the booking number?" },
+        { s: "You", t: "Sure, it's 4-7-2-9. Let me spell the name: D-E-D-O-N-G." },
+        { s: "Agent", t: "Got it. What would you like to change?" },
+        { s: "You", t: "Move it to the 5th. And could you confirm that by email?" }
+      ],
+      tip: "电话里报号码一位一位念，名字主动拼（Let me spell that），能省掉一大半听不清的来回。"
     }
   ]
 };

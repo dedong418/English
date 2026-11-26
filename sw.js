@@ -1,9 +1,10 @@
 // 离线缓存。改内容后把 CACHE 版本号 +1，用户下次联网会自动更新。
-const CACHE = "ykyy-v2";
+const CACHE = "ykyy-v3";
 const ASSETS = [
   "./", "./index.html", "./styles.css", "./app.js",
   "./manifest.webmanifest",
-  "./data/content.js", "./data/vocab.js", "./data/meeting.js", "./data/shadowing.js", "./data/daily.js",
+  "./data/content.js", "./data/vocab.js", "./data/meeting.js", "./data/shadowing.js",
+  "./data/daily.js", "./data/dailyread.js", "./data/dailylisten.js",
   "./icon-192.png", "./icon-512.png"
 ];
 self.addEventListener("install", e => {
